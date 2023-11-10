@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  BALENA_APP: ketil/balena-ads-b
+  BALENA_APP: arbal/balena-ads-b
 
 jobs:
   build:
