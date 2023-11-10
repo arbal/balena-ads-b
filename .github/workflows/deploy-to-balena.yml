@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch: # on button click
 
 env:
   BALENA_APP: gh_arbal/balena-ads-b
