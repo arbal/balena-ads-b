@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:bullseye AS base
+FROM balenalib/%%BALENA_ARCH%%-debian:bookworm AS base
 LABEL maintainer="https://github.com/ketilmo"
 
 EXPOSE 30001 30002 30003 30004 30005 30102 30104 30105 30106 8080
@@ -13,7 +13,7 @@ ENV DUMP1090_ADAPTIVE_MIN_GAIN=""
 ENV DUMP1090_ADAPTIVE_MAX_GAIN=""
 ENV DUMP1090_SLOW_CPU=""
 
-ARG PERM_INSTALL="tini lighttpd gettext-base libusb-1.0-0 libbladerf2 libhackrf0 liblimesuite20.10-1 librtlsdr0 rtl-sdr"
+ARG PERM_INSTALL="tini lighttpd gettext-base libusb-1.0-0 libbladerf2 libhackrf0 liblimesuite22.09-1 librtlsdr0 rtl-sdr libsoapysdr0.8 libncurses6"
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \
@@ -22,8 +22,8 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-ARG DUMP1090_VERSION=v8.2
-ARG TEMP_INSTALL="git build-essential cmake debhelper pkg-config libncurses5-dev libbladerf-dev libhackrf-dev liblimesuite-dev libusb-1.0-0-dev librtlsdr-dev apt-utils apt-transport-https debhelper"
+ARG DUMP1090_VERSION=v9.0
+ARG TEMP_INSTALL="git build-essential fakeroot cmake debhelper pkg-config libncurses5-dev libbladerf-dev libhackrf-dev liblimesuite-dev libusb-1.0-0-dev libsoapysdr-dev librtlsdr-dev apt-utils apt-transport-https debhelper"
 
 RUN apt update && \
 	apt install -y $TEMP_INSTALL

@@ -212,6 +212,16 @@ services:
       - '30154'
       - '30157'
       - '31003'
+  wingbits:
+    depends_on:
+      - dump1090-fa
+    build: ./wingbits
+    image: wingbits
+    restart: always
+    environment:
+      - WINGBITS_DEVICE_ID=
+    expose:
+      - '30154'
 # Optional: Uncomment to enable custom mlat server.
 #  mlat-client:
 #    depends_on:

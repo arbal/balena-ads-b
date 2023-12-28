@@ -1,9 +1,9 @@
 
 ![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
-**ADS-B Flight Tracker running on balena with support for FlightAware, Flightradar24, Plane Finder, OpenSky Network, AirNav RadarBox, and ADSB Exchange.**
+**ADS-B Flight Tracker running on balena with support for FlightAware, Flightradar24, Plane Finder, OpenSky Network, AirNav RadarBox, ADSB Exchange, and Wingbits.**
 
-Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), [OpenSky Network](https://opensky-network.org/), [AirNav RadarBox](https://www.radarbox.com/) and [ADSB Exchange](https://adsbexchange.com). In return, you will receive complimentary premium accounts worth several hundred dollars annually!
+Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), [OpenSky Network](https://opensky-network.org/), [AirNav RadarBox](https://www.radarbox.com/), [ADSB Exchange](https://adsbexchange.com) and [Wingbits](https://wingbits.com). In return, you will receive complimentary premium accounts (or cryptocurrency tokens) worth several hundred dollars annually!
 
 # Stay in the loop
 
@@ -52,6 +52,9 @@ Contribute to the flight tracking community! Feed your local ADS-B data from an 
 <tr><td>
 <img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/raspberrypi400-64.svg" alt="raspberrypi400-64" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 400</td>
 </tr>
+<tr><td>
+<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/raspberrypi5.svg" alt="raspberrypi5" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 5</td>
+</tr>
 </table>
 
 Please [let us know](https://github.com/ketilmo/balena-ads-b/discussions/new) if you are successfully running balena-ads-b on a hardware platform not listed here!
@@ -77,7 +80,11 @@ Thanks to [rmorillo24](https://github.com/rmorillo24/) for verifying balenaFin c
 
 Thanks to [schubydoo](https://github.com/schubydoo) for assistance with keeping the repository up to date.
 
-And thanks to [schubydoo](https://github.com/schubydoo), [JPGMC](https://github.com/JPGMC), and [alanb128](https://github.com/alanb128) for beta testing the UAT support.
+Thanks to [schubydoo](https://github.com/schubydoo), [JPGMC](https://github.com/JPGMC), and [alanb128](https://github.com/alanb128) for beta testing the UAT support.
+
+And thanks to [Aaron Shaw (shawaj)](https://github.com/shawaj) for implementing Wingbits support, fixing bugs, and improving the code.
+
+You are all stars! 🤩
 
 Software packages downloaded, installed, and configured by the balena-ads-b script are disclosed in [CREDITS.md](https://github.com/ketilmo/balena-ads-b/blob/master/CREDITS.md).
 
@@ -105,14 +112,17 @@ Software packages downloaded, installed, and configured by the balena-ads-b scri
   * [Alternative A: Port an existing RadarBox receiver](#alternative-a-port-an-existing-radarbox-receiver)
   * [Alternative B: Setup a new RadarBox receiver](#alternative-b-setup-a-new-radarbox-receiver)
 - [Part 8 – Configure ADSB Exchange](#part-8--configure-adsb-exchange)
-- [Part 9 – Configure UAT (Optional and US only)](#part-9--configure-uat-optional-and-us-only)
-- [Part 10 – Add a digital display (Optional)](#part-10--add-a-digital-display-optional)
-- [Part 11 – Exploring flight traffic locally on your device](#part-11--exploring-flight-traffic-locally-on-your-device)
-- [Part 12 – Advanced configuration](#part-12--advanced-configuration)
+- [Part 9 – Configure Wingbits](#part-9--configure-wingbits)
+  * [Alternative A: Port an existing Wingbits receiver](#alternative-a-port-an-existing-wingbits-receiver)
+  * [Alternative B: Setup a new Wingbits receiver](#alternative-b-setup-a-new-wingbits-receiver)
+- [Part 10 – Configure UAT (Optional and US only)](#part-10--configure-uat-optional-and-us-only)
+- [Part 11 – Add a digital display (Optional)](#part-11--add-a-digital-display-optional)
+- [Part 12 – Exploring flight traffic locally on your device](#part-12--exploring-flight-traffic-locally-on-your-device)
+- [Part 13 – Advanced configuration](#part-13--advanced-configuration)
   * [Disabling specific services](#disabling-specific-services)
-  * [Adaptive gain configuration](https://github.com/ketilmo/balena-ads-b/blob/master/README.md#adaptive-gain-configuration)
+  * [Adaptive gain configuration](#adaptive-gain-configuration)
   * [Setting dump1090 antenna gain](#setting-dump1090-antenna-gain)
- - [Part 13 – Updating to the latest version](#part-13--updating-to-the-latest-version)
+ - [Part 14 – Updating to the latest version](#part-14--updating-to-the-latest-version)
 
 # Part 1 – Build the receiver
 
@@ -315,7 +325,26 @@ If you have not previously set up a RadarBox receiver that you want to reuse, do
 7. Next, wait a minute or two for the service to restart and head over to ADSB Exchange's 
 [Feeder Status](https://www.adsbexchange.com/myip/) page from a PC on the same network as the feeder. Verify that your feeder is shown as registered and that ADSB Exchange is receiving your feed and MLAT data. You can also verify your feeder's performance at the [ADSB Exchange Feeder Map](https://map.adsbexchange.com/mlat-map/) by searching for your site name.
 
-# Part 9 – Configure UAT (Optional and US only) 
+# Part 9 – Configure Wingbits
+
+## Alternative A: Port an existing Wingbits receiver
+If you have previously set up a Wingbits receiver and want to port it to Balena, you only have to do the following steps:
+
+ 1. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button. Add a variable named `WINGBITS_DEVICE_ID` and paste the value of your existing Wingbits ID, e.g. `small-coral-spider`. To get your ID, visit the [Wingbits Dashboard](https://wingbits.com/dashboard/antennas), make sure you are on the *Antennas* tab and look in the ID column.
+ 2. Restart the *wingbits* service under *Services* by clicking the "cycle" icon next to the service name.
+
+## Alternative B: Setup a new Wingbits receiver
+If you have not previously set up a Wingbits receiver that you want to reuse, do the following steps:
+
+ 1. Register a new [Wingbits account](https://wingbits.com/register). Make sure to activate it using the email that's sent to you.
+ 2. Login to your [Wingbits account](https://wingbits.com/login), navigate to the *Antennas* tab and then click on *Register Antenna*.
+ 3. Enter your latitude and longitude in the boxes (or select your location on the map). Then scroll down and click *Register*. You will then be returned to the antennas page with a new entry in the list. Make sure to take note of the name in the ID column, for example `small-coral-spider`.
+ 4. Head back to your device's page on the balena dashboard.
+ 5. Click on the *Device Variables*-button in the left-hand menu. Add a variable named `WINGBITS_DEVICE_ID` and paste the value from step 4, e.g. `small-coral-spider`.
+ 6. Restart the *wingbits* service under *Services* by clicking the "cycle" icon next to the service name.
+ 7. Wait a few minutes and then head back to the [Wingbits antennas tab](https://wingbits.com/dashboard/antennas), refresh the page and in the *Status* column of the table you should see the text `Online` with a green background. If you hover over this with your mouse you should see a tooltip text pop-up that says the last time data was receive e.g. `Last message: 22/11/2023, 03:17:40`.
+
+# Part 10 – Configure UAT (Optional and US only) 
 ***Please note:** The following instructions involve making low-level changes to RTL-SDR USB sticks, such as changing the serial numbers. Proceed with caution, and only if you are comfortable with the steps involved. All changes made are at your own risk.*
 
 In the United States, aircraft can use either the ADS-B standard, which transmits at a frequency of 1090 MHz or the UAT protocol, which transmits at 978 MHz. If you live in the US and have an extra RTL-SDR dongle, you can track the UAT and ADS-B traffic. Please note that the blue FlightAware USB devices should only be used for ADS-B traffic, as they have an integrated filter optimized explicitly for the 1090 MHz frequencies. The orange FlightAware USB devices work well for tracking UAT traffic.
@@ -336,11 +365,10 @@ In the United States, aircraft can use either the ADS-B standard, which transmit
 14. Add a new variable named `UAT_ENABLED` and assign it the value `true`.
 15. Power on the device. You should now be feeding ADS-B and UAT data simultaneously to the services that support it (FlightAware, RadarBox and ADSB-Exchange).
 
-
-# Part 10 – Add a digital display (Optional)
+# Part 11 – Add a digital display (Optional)
 balena also produces a project that can be easily configured to display a webpage in kiosk mode on a digital display called balenaDash. By dropping that project into this one, we can automatically display a feeder page directly from the Pi. Ensure you have cloned this repository recursively (`git clone --recursive {{repository URL}}`). We can then set a `LAUNCH_URL` device variable configured to connect to `http://{{YOURIP or YOURSERVICENAME}}:YOURSERVICEPORT` (where the service/port is one of the frontends above, like `http://planefinder:30053`) and that will automatically be displayed on the attached display. The balenaDash service can be configured locally by accessing the webserver on port 8081.
 
-# Part 11 – Exploring flight traffic locally on your device
+# Part 12 – Exploring flight traffic locally on your device
 If the setup goes well, you should feed flight traffic data to several online services. You will receive access to the providers' premium services in return for your efforts. But in addition to this, you can explore the data straight from your device, raw and unedited. And that's part of the magic, right?
 
 When you have local network access to your receiver, you can explore the data straight from the source. Start by opening your device page in the balena console and locate the `IP ADDRESS` field, e.g. `10.0.0.10`. Then, add the desired port numbers specified further below.
@@ -359,7 +387,7 @@ Less visual than the two other options, Flightradar24's status page gives you hi
 **Dump978's Radar View (Optional and US only)**
 If you live in the US and have configuered UAT feeding, you can explore the data using this view. When you are in your local network, head to `YOURIP:8978` to check it out. When remote, open balena's *Public Device URL* and add `/skyaware978/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/skyaware978/`. However, keep in mind that UAT traffic is scarce. It might take several days before you see any traffic, depending on where in the US you are situated.
 
-# Part 12 – Advanced configuration
+# Part 13 – Advanced configuration
 ## Disabling specific services
 You can disable any of the balena-ads-b services by creating a *Device Variable* named `DISABLED_SERVICES` with the services you want to disable as comma-separated values. For example, if you want to disable the dump1090fa service, you set the `DISABLED_SERVICES` variable to `dump1090fa`. If you want to disable the dump1090fa and piaware services, you set the `DISABLED_SERVICES` variable to `dump1090fa, piaware`.
 
@@ -393,7 +421,7 @@ You can reduce the duty cycle further by creating a *Device Variable* named `DUM
 ## Setting dump1090 antenna gain
 By default, dump1090 will run with adaptive gain in dynamic range mode. You can override this by setting a *Device Variable* named `DUMP1090_GAIN` with a value of your liking.  You can read more about manual gain optimization at the [adsb-wiki](https://github.com/wiedehopf/adsb-wiki/wiki/Optimizing-gain).
 
-# Part 13 – Updating to the latest version
+# Part 14 – Updating to the latest version
 Updating to the latest version is trivial. If you installed balena-ads-b using the blue Deploy with balena-button, you can click it again and overwrite your current application. All settings will be preserved. For convenience, the button is right here:
 
 [![Deploy with button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/ketilmo/balena-ads-b&defaultDeviceType=raspberrypi4-64)

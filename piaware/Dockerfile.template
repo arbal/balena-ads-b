@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:bullseye AS base
+FROM balenalib/%%BALENA_ARCH%%-debian:bookworm AS base
 LABEL maintainer="https://github.com/ketilmo"
 
 EXPOSE 30105 30106
@@ -9,7 +9,7 @@ ENV RECEIVER_PORT 30005
 ENV RECEIVER_MLAT_PORT 30104
 ENV DUMP978_ENABLED=false
 
-ARG PERM_INSTALL="tini net-tools tclx8.4 tcllib itcl3 libboost-filesystem1.74.0 libboost-program-options1.74.0 libboost-regex1.74.0 libboost-system1.74.0 libexpat1 expect libmpdec3" 
+ARG PERM_INSTALL="tini net-tools tclx8.4 tcllib itcl3 libboost-filesystem1.74.0 libboost-program-options1.74.0 libboost-regex1.74.0 libboost-system1.74.0 libexpat1 expect openssl" 
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \
@@ -18,8 +18,8 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-ARG PIAWARE_VERSION="v8.2"
-ARG TEMP_INSTALL="wget devscripts build-essential debhelper tcl8.6-dev autoconf python3-dev python3-venv python3-setuptools patchelf debhelper libz-dev git libssl-dev tcl-dev chrpath libboost-system-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev" 
+ARG PIAWARE_VERSION=v9.0
+ARG TEMP_INSTALL="wget devscripts build-essential debhelper tcl8.6-dev autoconf python3-dev python3-venv python3-setuptools python3-wheel python3-build python3-pip patchelf debhelper libz-dev git libssl-dev tcl-dev chrpath libboost-system-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev" 
 
 RUN apt update && \
 	apt install -y $TEMP_INSTALL
@@ -28,8 +28,8 @@ WORKDIR /tmp
 
 RUN git clone http://github.com/flightaware/tcltls-rebuild.git && \
 	cd tcltls-rebuild && \
-	./prepare-build.sh buster && \
-	cd package-buster && \
+	./prepare-build.sh bullseye && \
+	cd package-bullseye && \
 	dpkg-buildpackage -b --no-sign && \
 	cd .. && \
 	dpkg -i tcl-tls_*.deb && \
@@ -40,8 +40,8 @@ WORKDIR /tmp
 RUN git clone http://github.com/flightaware/piaware_builder && \
 	cd piaware_builder && \
 	git checkout tags/${PIAWARE_VERSION} && \
-	./sensible-build.sh buster && \
-	cd package-buster && \
+	./sensible-build.sh bookworm && \
+	cd package-bookworm && \
     dpkg-buildpackage -b --no-sign
 
 FROM base AS release
