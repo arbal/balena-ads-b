@@ -11,7 +11,7 @@ if [ "$arch" = "arm64" ]; then
 	
 elif [ "$arch" = "amd64" ]; then 
 	fr24feed_arch=amd64
-	fr24feed_url="https://repo-feed.flightradar24.com/linux_x86_64_binaries/"
+	fr24feed_url="https://repo-feed.flightradar24.com/linux_binaries/"
 else 
 	fr24feed_arch=armhf
 	fr24feed_url="https://repo-feed.flightradar24.com/rpi_binaries/"

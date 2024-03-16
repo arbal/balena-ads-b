@@ -78,7 +78,7 @@ Thanks to [garethhowell](https://github.com/garethhowell) for implementing the i
 
 Thanks to [rmorillo24](https://github.com/rmorillo24/) for verifying balenaFin compatibility, to [adaptive](https://github.com/adaptive/) for confirming Raspberry Pi 400 compatibility, and to [eagleDiego](https://github.com/eagleDiego) for confirming Orange Pi Zero compability.
 
-Thanks to [schubydoo](https://github.com/schubydoo) for assistance with keeping the repository up to date.
+Thanks to [schubydoo](https://github.com/schubydoo) and [Teko012](https://github.com/Teko012/) for assistance with keeping the repository up to date.
 
 Thanks to [schubydoo](https://github.com/schubydoo), [JPGMC](https://github.com/JPGMC), and [alanb128](https://github.com/alanb128) for beta testing the UAT support.
 
@@ -429,3 +429,5 @@ Updating to the latest version is trivial. If you installed balena-ads-b using t
 If you used the manual `balena push` method, pull the changes from the master branch and push the update to your application with the balena CLI. For complete instructions, look at [Part 2 – Setup balena and configure the device](#part-2--setup-balena-and-configure-the-device).
 
 Enjoy!
+
+![Visitors](https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fgithub.com%2Fketilmo%2Fbalena-ads-b&countColor=%23263759)
