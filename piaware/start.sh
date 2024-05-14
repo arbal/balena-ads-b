@@ -55,9 +55,9 @@ echo " "
 
 # If dump978-fa is disabled through config, disable it in piaware.
 if [[ "$UAT_ENABLED" = "true" ]]; then
-        /usr/bin/piaware-config uat-receiver-type sdr
-        /usr/bin/piaware-config uat-receiver-host dump978-fa
-        /usr/bin/piaware-config uat-receiver-port 30978
+        /usr/bin/piaware-config uat-receiver-type other
+        /usr/bin/piaware-config uat-receiver-host "${UAT_RECEIVER_HOST}"
+        /usr/bin/piaware-config uat-receiver-port "${UAT_RECEIVER_PORT}"
 else
         /usr/bin/piaware-config uat-receiver-type none
 
