@@ -8,9 +8,13 @@ services:
     build: ./balena-dash/kiosk
     privileged: true
     ports:
-      - 8081:8080
+      - 5011:5011
     volumes:
       - 'settings:/data'
+  scheduler:
+    restart: always
+    build: ./balena-dash/scheduler
+    privileged: true
   wifi-connect:
     build: ./wifi-connect
     restart: always
@@ -27,6 +31,16 @@ services:
       - NET_ADMIN
     labels:
       io.balena.features.dbus: '1'
+  fbcp:
+    build: ./balena-dash/fbcp
+    restart: on-failure
+    privileged: true
+  browsercontrol:
+    build: ./balena-dash/browsercontrol
+    restart: always
+    privileged: true
+    ports:
+      - 8081:80
   frontend-proxy:
     image: traefik
     build: ./traefik
