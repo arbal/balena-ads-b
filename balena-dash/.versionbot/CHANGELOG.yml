@@ -1,0 +1,793 @@
+- commits:
+    - subject: Move to labs blocks + add flowzone
+      hash: 5577142d047185f5742d93049898dd97eea51ce5
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+      nested: []
+    - subject: Updating repo references from balenalabs to balena-labs-projects
+      hash: 47e61c8461bbd315b0268178b2b33441af04a8f3
+      body: ""
+      footer:
+        Signed-off-by: Flynn Joffray <flynn@balena.io>
+        signed-off-by: Flynn Joffray <flynn@balena.io>
+        Change-type: patch
+        change-type: patch
+      author: Flynn Joffray
+      nested: []
+  version: 2.0.6
+  title: ""
+  date: 2022-11-28T09:26:12.159Z
+- commits:
+    - subject: Add notes to balena.yml
+      hash: 3f139bdd82e576ba38ca489164909cf6a670e053
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+      nested: []
+  version: 2.0.5
+  title: "'Add notes to balena.yml'"
+  date: 2022-08-03T23:25:10.276Z
+- commits:
+    - subject: Bump browser block version
+      hash: 35d8b7b058aef2cc767e87a3c9821fff870f77ef
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+      nested: []
+  version: 2.0.4
+  title: "'Bump browser block version'"
+  date: 2022-08-03T21:06:02.237Z
+- commits:
+    - subject: Updated dead links
+      hash: 3909069e66322a8abedd07a4022aad936a5deb31
+      body: >
+        Looks like the original Fishtank is gone so found it on webglsamples.org
+        instead. Also Akirodic has updated the url for the jellyfish. Finally
+        added a link to what we use the Balena-dash project for.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        Co-authored-by: Martin Westergaard Lassen <martin@mwl.dk>
+        co-authored-by: Martin Westergaard Lassen <martin@mwl.dk>
+      author: Chris Crocker-White
+      nested: []
+  version: 2.0.3
+  title: "'Updated dead links'"
+  date: 2022-08-03T19:54:26.341Z
+- commits:
+    - subject: Create balena.yml
+      hash: eb60760eeb22994f8092078b271a2102e15b66fa
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        Co-authored-by: Phil Wilson <phil@balena.io>
+        co-authored-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+      nested: []
+  version: 2.0.2
+  title: "'Create balena.yml'"
+  date: 2022-08-03T19:23:30.483Z
+- commits:
+    - subject: "Update readme fixes #153"
+      hash: a6f5f8ea26fac9738fff4d0dc3cf917cbd3ac3bb
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+      nested: []
+  version: 2.0.1
+  title: "'Update readme fixes #153'"
+  date: 2022-08-03T18:59:03.868Z
+- commits:
+    - subject: Move to balenaCloud hosted browser block. Swap Tahora for browsercontrol.
+      hash: 7037c59bf556ef368709f6d35bc89160c6148537
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+      nested: []
+  version: 2.0.0
+  title: "'Move to balenaCloud hosted browser block.'"
+  date: 2022-03-25T18:13:56.192Z
+- commits:
+    - subject: Edits to readme, fix DWB position
+      hash: d217747960cb90c869b04cd73f4477c3c74d83da
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Andrew Nhem
+      nested: []
+  version: 1.0.16
+  date: 2022-01-19T18:47:40.730Z
+- commits:
+    - subject: Readme updates - fix images
+      hash: 8513c11010a8d9a82e302d968e9450081dddd337
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+      nested: []
+  version: 1.0.15
+  date: 2021-12-21T13:01:19.639Z
+- commits:
+    - subject: user namespacing fix
+      hash: 1e20cc06c102d4e965dcbece8be492ada275f0f8
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+      nested: []
+  version: 1.0.14
+  date: 2021-10-18T08:27:56.630Z
+- commits:
+    - subject: Fix tohora build issue
+      hash: 938cfcb8b5969613974aef251405d936ee645dbf
+      body: |
+        - Pin go version
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+      nested: []
+  version: 1.0.13
+  date: 2021-09-06T05:10:31.062Z
+- commits:
+    - subject: "renamathon: Use new terminology"
+      hash: c57e10867390f749f0a8cdd49310dd39ad397191
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+      nested: []
+  version: 1.0.12
+  date: 2021-08-06T14:32:30.067Z
+- commits:
+    - subject: "meta: remove CODEOWNERS file"
+      hash: 2811d0c5072f43d2502ad7659d2bf2a181461877
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Tomás Migone <tomas@balena.io>
+        signed-off-by: Tomás Migone <tomas@balena.io>
+      author: Tomás Migone
+      nested: []
+  version: 1.0.11
+  date: 2021-06-30T16:18:37.179Z
+- commits:
+    - subject: contract updates
+      hash: a2eef7623352c76a7abf73e621f065cb45911386
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+      nested: []
+  version: 1.0.10
+  date: 2021-05-21T08:13:16.458Z
+- commits:
+    - subject: Pin kiosk service to browser v1
+      hash: 2ba66ab5067ead5f0376f5fabb586dc598b572c4
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+      nested: []
+  version: 1.0.9
+  date: 2021-04-05T15:06:41.726Z
+- commits:
+    - subject: Update balena.yml to use contracts
+      hash: 9436dfa4f2c6e3cd17930f530b8b5c83b83e311b
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Tomás Migone <tomas@balena.io>
+        signed-off-by: Tomás Migone <tomas@balena.io>
+      author: Tomás Migone
+      nested: []
+  version: 1.0.8
+  date: 2021-02-02T12:59:49.345Z
+- commits:
+    - subject: description update
+      hash: a224e92c229aaaabedfe4d43165e78f65d096861
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+      nested: []
+  version: 1.0.7
+  date: 2021-01-29T17:58:39.898Z
+- commits:
+    - subject: Added pi400 to supported devices
+      hash: 7e62042262f9e58d5b57901ad8c9293c2fe1940c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+      nested: []
+  version: 1.0.6
+  date: 2021-01-08T11:04:19.413Z
+- commits:
+    - subject: Use svg deploy with balena button
+      hash: 03c8f5378297e5e4448c6af25816599e092d9664
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Amit Solanki <amit@balena.io>
+        signed-off-by: Amit Solanki <amit@balena.io>
+      author: Amit Solanki
+      nested: []
+  version: 1.0.5
+  date: 2020-12-02T00:00:30.298Z
+- commits:
+    - subject: "meta: Fix balena.yml identation"
+      hash: 5755bf6e067308528b1fc7ff7de08d396a961524
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Tomás Migone <tomas@balena.io>
+        signed-off-by: Tomás Migone <tomas@balena.io>
+      author: Tomás Migone
+      nested: []
+  version: 1.0.4
+  date: 2020-11-25T16:28:20.386Z
+- commits:
+    - subject: Edit balena.yml and add logo for balenaHub
+      hash: b4cf06ed363ae2d7bc79a321fb5043c243397ef1
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Andrew Nhem <andrewn@balena.io>
+        signed-off-by: Andrew Nhem <andrewn@balena.io>
+      author: andrew
+      nested: []
+  version: 1.0.3
+  date: 2020-11-25T13:48:50.634Z
+- commits:
+    - subject: Remove eng.traineddata file
+      hash: 70533cbd8f3321f910b9878e16d62be39ac5c157
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+      nested: []
+    - subject: Repo edits
+      hash: dfe2e5781f38094c9343acc6e93c6f70d7cc8ccf
+      body: |
+        Need to catch up Landr build in future, but these changes should help
+        existing users for now.
+        now.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Andrew Nhem <andrewn@balena.io>
+        signed-off-by: Andrew Nhem <andrewn@balena.io>
+      author: andrew
+      nested: []
+  version: 1.0.2
+  date: 2020-10-29T06:05:09.611Z
+- commits:
+    - subject: Add instructions for Device configurations when using TFT displays
+      hash: fd8ad653bc7aa861b620a3db1c8531361af53c24
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+      nested: []
+  version: 1.0.1
+  date: 2020-10-27T11:02:09.556Z
+- commits:
+    - subject: Update readme for v1.0
+      hash: d7554d631c216d269e22455b3bac47d3c46837da
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+      nested: []
+    - subject: Add default values in for DWB
+      hash: d639cce78ae03a1619d6270844f895f27e4c5536
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+      nested: []
+    - subject: Use wifi-connect block
+      hash: 00c2a81e1c28c12fd388bcf931f27b68c6ded14f
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+      nested: []
+    - subject: Add fbcp block
+      hash: 7b883356a71b9b0b924b53d895847b0a7682e2c7
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+      nested: []
+    - subject: Use browser block and remove photo service
+      hash: c1d0be1e0b9d887f7332d27cebb49630e046193d
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+      nested: []
+  version: 1.0.0
+  date: 2020-10-15T11:01:26.559Z
+- commits:
+    - subject: Adding masterclass link to readme
+      hash: 8d585efd9247e09480e505d46d7bf04247de4a12
+      body: >
+        Adds link to masterclasses into Dash readme. Temporary as we'll move
+        masterclass links to Troubleshooting in landr setup.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Andrew Nhem <andrewn@balena.io>
+        signed-off-by: Andrew Nhem <andrewn@balena.io>
+      author: andrewnhem
+      nested: []
+  version: 0.10.2
+  date: 2020-07-13T18:12:36.659Z
+- commits:
+    - subject: Update balena.yml
+      hash: 21d8f0e60d5a40bf9a737de120d5db28b1839645
+      body: |
+        Change RESIN_HOST_CONFIG_gpu_mem to BALENA_HOST_CONFIG_gpu_mem.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: John Tonello <johnt@balena.io>
+        signed-off-by: John Tonello <johnt@balena.io>
+      author: John S. Tonello
+  version: 0.10.1
+  date: 2020-06-24T14:58:15.783Z
+- commits:
+    - subject: Fix deploy with balena URL and readme edits
+      hash: aa1a2a80dc30104e95a647cb2a642e186b3006c9
+      body: |
+        * fixed deploy with balena URL
+        * various minor readme edits
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Andrew Nhem <andrewn@balena.io>
+        signed-off-by: Andrew Nhem <andrewn@balena.io>
+      author: andrewnhem
+  version: 0.10.0
+  date: 2020-05-28T20:07:41.604Z
+- commits:
+    - subject: More readme changes
+      hash: e52543fad6a4e7618cd1b55e790ee36cdd19d404
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+    - subject: Re-included GPU_mem line
+      hash: 28d9bcb453dac970e9e402fadb08110052c7e196
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+    - subject: Added config file for "deploy" button. Updated Readme to include button.
+      hash: 97be29495d28418ce248142ac385859b022e5ffa
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+  version: 0.9.2
+  date: 2020-04-28T20:17:18.329Z
+- commits:
+    - subject: Updated the environment variable code to check their value.
+      hash: 277d21a80f407eab616962fcb0fe4aabe7a7cc47
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+    - subject: Fixed config mode bug
+      hash: dbe8ce1af52060199cd8a9fcf302b59464ddc162
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+    - subject: Enabled the cursor by default when in config mode
+      hash: ec6785fe602bda66db35f969c1f7f759b838acfa
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+    - subject: Added config mode envar to enable or disable KIOSK, fullscreen and
+        whether the browser runs in app mode.
+      hash: bc721b88ec4cc4696bb6e19c2076ef0c539b9b14
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+    - subject: Implemented SHOW_CURSOR envar to control WPE and Chromium cursor
+        status. Previous WPE_BCMRPI_CURSOR still honoured to ensure backwards
+        compatibility for WPE installations.
+      hash: 3df2ebefa0a071bd476d97e8184f02a6277934c7
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+  version: 0.9.1
+  date: 2020-04-16T09:25:27.442Z
+- commits:
+    - subject: Fallback to sysfs to control backlight if vbetool fails
+      hash: 6f19dac46d72533b83571bcf037132b9952dee99
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Rahul Thakoor <rahul.thakoor@gmail.com>
+        signed-off-by: Rahul Thakoor <rahul.thakoor@gmail.com>
+      author: Rahul Thakoor
+    - subject: Add support for x64 devices
+      hash: 693224e1b5374041aa11a2b9f99726c7bfedc490
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Rahul Thakoor <rahul@balena.io>
+        signed-off-by: Rahul Thakoor <rahul@balena.io>
+      author: Rahul Thakoor
+  version: 0.9.0
+  date: 2020-04-14T13:26:03.473Z
+- commits:
+    - subject: Add variable to enable/disable CEC command
+      hash: 1fbc31913907f9ad3dcf2c71780bb125fef70490
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+    - subject: Changes to support video calls and TV control with dash
+      hash: 7eeac22f2a296f54efff8ee6d7de912592311985
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Phil Wilson <phil@balena.io>
+        signed-off-by: Phil Wilson <phil@balena.io>
+      author: Phil Wilson
+  version: 0.8.8
+  date: 2020-04-14T08:33:43.560Z
+- commits:
+    - subject: Added GPU mem warning for WPE
+      hash: 8922f806e584f25784dbff225da9359a5ae38caa
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+    - subject: Cleaned log and added Pi 4 GPU mem warning
+      hash: a8b7f748ce7f9e5984bc23d6f1577562d8481ac8
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+    - subject: Quieten the wifi-connect log
+      hash: 98efd9e735a3884688533725ca6e1c1433579528
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+    - subject: Change to LAUNCH_URL and default to fb size on Pi4
+      hash: 9aa7cd15588851df12303add888e912eda375e75
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+  version: 0.8.7
+  date: 2020-03-18T10:54:32.088Z
+- commits:
+    - subject: "photos: Remove uneccesary ~"
+      hash: 2795081f4a78af4e3ace62290e0face1009ce1a4
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Tomás Migone <tomas@balena.io>
+        signed-off-by: Tomás Migone <tomas@balena.io>
+      author: Tomás Migone
+    - subject: "usbstorage: Fix dockerfile that was broken with multistage"
+      hash: bea6c8d0244b0e5ab88b48e272429288782a7040
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Tomás Migone <tomas@balena.io>
+        signed-off-by: Tomás Migone <tomas@balena.io>
+      author: Tomás Migone
+    - subject: "photos: Fix working dir on container"
+      hash: 04f44e53a012f92cd3bf3fb2cadc82d1246c4fc3
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Tomás Migone <tomas@balena.io>
+        signed-off-by: Tomás Migone <tomas@balena.io>
+      author: Tomás Migone
+  version: 0.8.6
+  date: 2020-03-17T15:08:32.629Z
+- commits:
+    - subject: "meta: Update codeowners to HHR team"
+      hash: ecc22165bcc467d72cc73f7316df83b3562d5e50
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Matthew McGinn <mamcgi@gmail.com>
+        signed-off-by: Matthew McGinn <mamcgi@gmail.com>
+      author: Matthew McGinn
+  version: 0.8.5
+  date: 2020-01-30T15:55:03.519Z
+- commits:
+    - subject: Add ability to set timezone for scheduler
+      hash: 49ee6e6023f3ef676d7f62021f3b9d4d754b7fe1
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+  version: 0.8.4
+  date: 2020-01-02T14:20:39.955Z
+- commits:
+    - subject: Correct unmount device `unmount` -> `umount`
+      hash: 38cad6b99d50879e1f294a40c003cc1dbc69e537
+      body: >
+        The script isn't actually umounting the drive because it calls the
+        non-existent `unmount` and should call `umount`. Same problem in
+        https://github.com/tmigone/balena-udev-examples/blob/master/usb-copy/copy.sh#L27
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: John Whittington
+  version: 0.8.3
+  date: 2020-01-01T15:52:02.029Z
+- commits:
+    - subject: cosmetic
+      hash: 3a7a6b17ea42d79f866eb2218996cca9b92aeb82
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: janvda
+    - subject: removed  logging added for debugging
+      hash: 7fdbf36e31c56cc7b099a84b8980d9e2a8b23d2e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: janvda
+  version: 0.8.2
+  date: 2020-01-01T12:12:42.548Z
+- commits:
+    - subject: Add information about PiTFT usage to readme
+      hash: 61462024ebd43dba7028d1189d86723b284df55b
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+  version: 0.8.1
+  date: 2019-11-05T21:52:54.599Z
+- commits:
+    - subject: Moved sleep in wpe-init for custom url support
+      hash: af55b6cd24702b80371160defa42bb8894f9b12c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Anže Jenšterle
+    - subject: var check for scheduler script
+      hash: 2eb1c65ea98f96f86b82c15ba2508f23dff56b09
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Anže Jenšterle
+    - subject: Added USB stick support for photos container.
+      hash: c1583569a177517db1421264169df142b360631f
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Tomás Migone
+    - subject: Update readme file
+      hash: 24ff0a50dbffb3881363dc84e371ad145dcf7391
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Daniel Andrade <daniel@balena.io>
+        signed-off-by: Daniel Andrade <daniel@balena.io>
+      author: Daniel Andrade
+    - subject: "Add possibility to shuffle images. Closes #33"
+      hash: ab4ae7cf9eeee2c45fa27dc813eaceccee828470
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Daniel Andrade <daniel@balena.io>
+        signed-off-by: Daniel Andrade <daniel@balena.io>
+      author: Daniel Andrade
+  version: 0.8.0
+  date: 2019-10-23T11:11:58.308Z
+- commits:
+    - subject: Add FAQ
+      hash: 7a835c3ee0dd32da49e98fe2280c4387ded3ab49
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dimitrios Lytras
+  version: 0.7.4
+  date: 2019-10-09T09:40:45.382Z
+- commits:
+    - subject: Update codeowners, add PR template
+      hash: b78a842bdc4f38398565e5a63c8a2a1f14a54bc3
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Chris Crocker-White <chriscw@balena.io>
+        signed-off-by: Chris Crocker-White <chriscw@balena.io>
+      author: Chris Crocker-White
+  version: 0.7.3
+  date: 2019-10-08T10:08:16.131Z
+- commits:
+    - subject: "photos: switch to multistage build"
+      hash: e01761f3da284ce8b52616ea83e80b4b007bdc71
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Shaun Mulligan shaun@balena.io
+        signed-off-by: Shaun Mulligan shaun@balena.io
+      author: Shaun Mulligan
+  version: 0.7.2
+  date: 2019-10-01T06:54:34.536Z
+- commits:
+    - subject: add sleep when starting wifi-connect
+      hash: e669fbfb400fe6c7d7f8173cfa65a5ea4da1042a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Shaun Mulligan <shaun@balena.io>
+        signed-off-by: Shaun Mulligan <shaun@balena.io>
+      author: Shaun Mulligan
+  version: 0.7.1
+  date: 2019-09-30T14:34:34.712Z
+- commits:
+    - subject: Add machine-readable changelog
+      hash: 97fd7e1fafc3525fc70f6fc9948b4019d62fa714
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Dimitrios Lytras
+    - subject: Enable scrutinizer
+      hash: cffe8aaf6673f5fdacd98a8475fd09f2dd0684b9
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Dimitrios Lytras
+  version: 0.7.0
+  date: 2019-09-25T12:44:33.711Z
