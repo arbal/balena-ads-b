@@ -3,18 +3,14 @@ volumes:
   settings:
   radarbox:
 services:
-  kiosk:
-    restart: always
-    build: ./balena-dash/kiosk
-    privileged: true
+  browser:
+    image: bh.cr/balenalabs/browser-aarch64 # where <arch> is one of aarch64, arm32 or amd64
+    privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
     ports:
-      - 5011:5011
+        - '5011' # management API (optional)
+        - '35173' # Chromium debugging port (optional)
     volumes:
-      - 'settings:/data'
-  scheduler:
-    restart: always
-    build: ./balena-dash/scheduler
-    privileged: true
+      - 'settings:/data' # Only required if using PERSISTENT flag (see below)
   wifi-connect:
     build: ./wifi-connect
     restart: always
@@ -31,16 +27,6 @@ services:
       - NET_ADMIN
     labels:
       io.balena.features.dbus: '1'
-  fbcp:
-    build: ./balena-dash/fbcp
-    restart: on-failure
-    privileged: true
-  browsercontrol:
-    build: ./balena-dash/browsercontrol
-    restart: always
-    privileged: true
-    ports:
-      - 8081:80
   frontend-proxy:
     image: traefik
     build: ./traefik
@@ -91,7 +77,7 @@ services:
       - "traefik.http.middlewares.skyaware-redirect.redirectregex.permanent=true"
       # Temporary redirect for legacy purposes (from 13 March 2021)
       - "traefik.http.routers.dump1090-fa.rule=PathPrefix(`/dump1090-fa`)"
-      - "traefik.http.routers.dump1090-fa.middlewares=dump1090-fa-redirect" 
+      - "traefik.http.routers.dump1090-fa.middlewares=dump1090-fa-redirect"
       - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.regex=^.*/dump1090-fa.*$$"
       - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.replacement=/skyaware/"
       - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.permanent=true"
@@ -258,4 +244,4 @@ services:
 #      - MLAT_CLIENT_USER=
 
 
-    
+
