@@ -1,0 +1,3 @@
+[submodule "balena-dash"]
+	path = balena-dash
+	url = https://github.com/balena-labs-projects/balena-dash
