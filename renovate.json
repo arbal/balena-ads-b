@@ -1,0 +1,141 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "ignorePaths": [
+    "autohupr/**",
+    "wifi-connect/**"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile$/",
+        "/(^|/)Dockerfile\\.[^/]*$/"
+      ],
+      "matchStrings": [
+        "renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s(ARG|ENV) .*?_VERSION=(?<currentValue>.*)\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile\\.[^/]*$/"
+      ],
+      "matchStrings": [
+        "WINGBITS_COMMIT_ID=(?<currentDigest>.*?)\\nENV WINGBITS_DATE=(?<currentValue>.*?)\\n"
+      ],
+      "versioningTemplate": "regex:^(?<major>20\\d\\d)-(?<minor>\\d\\d)-(?<patch>\\d\\d)T(?<build>\\d\\d)",
+      "depNameTemplate": "wingbits-json",
+      "datasourceTemplate": "custom.wingbits-json"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile\\.[^/]*$/"
+      ],
+      "matchStrings": [
+        "WINGBITS_CONFIG_VERSION=(?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "wingbits-version",
+      "datasourceTemplate": "custom.wingbits-version"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile\\.[^/]*$/"
+      ],
+      "matchStrings": [
+        "OPENSKY_VERSION=(?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "opensky",
+      "datasourceTemplate": "custom.opensky"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile\\.[^/]*$/"
+      ],
+      "matchStrings": [
+        "MLAT_VERSION=(?<currentDigest>.*?)\\n"
+      ],
+      "currentValueTemplate": "master",
+      "packageNameTemplate": "https://github.com/wiedehopf/mlat-client",
+      "datasourceTemplate": "git-refs"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile\\.[^/]*$/"
+      ],
+      "matchStrings": [
+        "SOAPYRTLSDR_VERSION=(?<currentDigest>.*?)\\n"
+      ],
+      "currentValueTemplate": "master",
+      "packageNameTemplate": "https://github.com/pothosware/SoapyRTLSDR",
+      "datasourceTemplate": "git-refs"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile\\.[^/]*$/"
+      ],
+      "matchStrings": [
+        "AIRSPY_VERSION=(?<currentDigest>.*?)\\n"
+      ],
+      "currentValueTemplate": "master",
+      "packageNameTemplate": "https://github.com/wiedehopf/airspy-conf",
+      "datasourceTemplate": "git-refs"
+    }
+  ],
+  "customDatasources": {
+    "flightradar24": {
+      "defaultRegistryUrlTemplate": "https://s3.dualstack.us-east-1.amazonaws.com/repo.feed.flightradar24.com/fr24feed_versions.json",
+      "transformTemplates": [
+        "{\"releases\":[{\"version\": $.platform.linux_arm64_tgz.version}]}"
+      ]
+    },
+    "opensky": {
+      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/ketilmo/balena-ads-b/refs/heads/master/opensky-network/.Packages",
+      "transformTemplates": [
+        "{ \"releases\": [{ \"version\": $trim($[0].releases.version.$match(/Version: ([^\\s]+)/).groups[0]) }] }"
+      ],
+      "format": "plain"
+    },
+    "wingbits-version": {
+      "defaultRegistryUrlTemplate": "https://gitlab.com/wingbits/config/-/raw/master/download.sh",
+      "transformTemplates": [
+        "{ \"releases\": [{ \"version\": $trim($[0].releases.version.$match(/WINGBITS_CONFIG_VERSION=\"([^\\s]+)\"/).groups[0]) }] }"
+      ],
+      "format": "plain"
+    },
+    "wingbits-json": {
+      "defaultRegistryUrlTemplate": "https://install.wingbits.com/linux-arm64.json",
+      "transformTemplates": [
+        "{\"releases\":[{\"version\": $.Date, \"releaseTimestamp\": $.Date, \"digest\": $.Version}]}"
+      ]
+    }
+  },
+  "packageRules": [
+    {
+      "matchDepNames": [
+        "/^wingbits/"
+      ],
+      "matchDatasources": [
+        "custom.wingbits-version",
+        "custom.wingbits-json"
+      ],
+      "groupName": "wingbits version to latest"
+    }
+  ],
+  "logLevelRemap": [
+    {
+      "matchMessage": "/^Custom manager fetcher/",
+      "newLogLevel": "info"
+    }
+  ]
+}
