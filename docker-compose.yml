@@ -1,44 +1,49 @@
-version: '2'
+version: '2.4'
 volumes:
   settings:
-  radarbox:
+  airnav-radar:
+  tar1090:
 services:
-  browser:
-    image: bh.cr/balenalabs/browser-aarch64 # where <arch> is one of aarch64, arm32 or amd64
-    privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
+  kiosk:
+    restart: unless-stopped
+    build: ./kiosk
+    privileged: true
     ports:
-        - '5011' # management API (optional)
-        - '35173' # Chromium debugging port (optional)
+      - 8081:8080
     volumes:
-      - 'settings:/data' # Only required if using PERSISTENT flag (see below)
+      - 'settings:/data'
+    labels:
+      io.balena.features.supervisor-api: '1'
   wifi-connect:
     build: ./wifi-connect
-    restart: always
+    restart: unless-stopped
     network_mode: host
     environment:
-      - DBUS_SYSTEM_BUS_ADDRESS="unix:path=/host/run/dbus/system_bus_socket"
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
       - PORTAL_LISTENING_PORT=8181
       - PORTAL_SSID=balenaWiFi
       - PORTAL_PASSPHRASE=balenaWiFi
-      - ACTIVITY_TIMEOUT=120
+      - ACTIVITY_TIMEOUT=180
     ports:
       - "8181:8181"
     cap_add:
       - NET_ADMIN
     labels:
       io.balena.features.dbus: '1'
+      io.balena.features.supervisor-api: '1'
   frontend-proxy:
     image: traefik
     build: ./traefik
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
     labels:
       io.balena.features.balena-socket: '1'
+      io.balena.features.supervisor-api: '1'
   dump1090-fa:
     build: ./dump1090-fa
     image: dump1090-fa
-    restart: always
+    restart: unless-stopped
     privileged: true
     environment:
       - LAT=
@@ -68,6 +73,7 @@ services:
       - "30106:30106"
       - "8080:8080"
     labels:
+      - "io.balena.features.supervisor-api=1"
       - "traefik.enable=true"
       # New, permanent redirect (from 13 March 2021)
       - "traefik.http.routers.skyaware.rule=PathPrefix(`/skyaware`)"
@@ -85,7 +91,7 @@ services:
   dump978-fa:
     build: ./dump978-fa
     image: dump978-fa
-    restart: always
+    restart: unless-stopped
     environment:
       - LAT=
       - LON=
@@ -102,6 +108,7 @@ services:
       - "30979:30979"
       - "8978:8978"
     labels:
+      - "io.balena.features.supervisor-api=1"
       - "traefik.enable=true"
       - "traefik.http.routers.dump978-fa.rule=PathPrefix(`/skyaware978`)"
       - "traefik.http.routers.dump978-fa.middlewares=dump978-fa-redirect"
@@ -113,21 +120,24 @@ services:
       - dump1090-fa
     build: ./piaware
     image: piaware
-    restart: always
+    restart: unless-stopped
     environment:
       - FLIGHTAWARE_FEEDER_ID=
       - DUMP978_ENABLED=false
+    labels:
+      io.balena.features.supervisor-api: '1'
   fr24feed:
     depends_on:
       - dump1090-fa
     build: ./fr24feed
     image: fr24feed
-    restart: always
+    restart: unless-stopped
     ports:
       - "8754:8754"
     environment:
       - FR24_KEY=
     labels:
+      - "io.balena.features.supervisor-api=1"
       - "traefik.enable=true"
       - "traefik.http.routers.fr24feed.rule=PathPrefix(`/fr24feed`)"
       - "traefik.http.routers.fr24feed-a.rule=Path(`/logo.png`)"
@@ -153,10 +163,11 @@ services:
       - dump1090-fa
     build: ./planefinder
     image: planefinder
-    restart: always
+    restart: unless-stopped
     ports:
       - "30053:30053"
     labels:
+      - "io.balena.features.supervisor-api=1"
       - "traefik.enable=true"
       - "traefik.http.routers.planefinder.rule=PathPrefix(`/planefinder`)"
       - "traefik.http.routers.planefinder-a.rule=PathPrefix(`/`)"
@@ -180,34 +191,38 @@ services:
       - dump1090-fa
     build: ./opensky-network
     image: opensky-network
-    restart: always
+    restart: unless-stopped
     environment:
       - OPENSKY_USERNAME=
       - OPENSKY_SERIAL=
-  radarbox:
+    labels:
+      io.balena.features.supervisor-api: '1'
+  airnav-radar:
     depends_on:
       - dump1090-fa
-    build: ./radarbox
-    image: radarbox
-    restart: always
+    build: ./airnav-radar
+    image: airnav-radar
+    restart: unless-stopped
     expose:
       - "32088"
     environment:
-      - RADARBOX_KEY=
+      - AIRNAV_RADAR_KEY=
       - LAT=
       - LON=
       - ALT=
-#Slight hack to make RadarBox run on i386 and amd64 architectures.
     volumes:
-      - 'radarbox:/sys/class/thermal:ro'
-      - 'radarbox:/var/radarbox/thermal'
+      #Slight hack to make AirNav Radar run on i386 and amd64 architectures.
+      - 'airnav-radar:/sys/class/thermal:ro'
+      - 'airnav-radar:/var/radarbox/thermal'
+    labels:
+      io.balena.features.supervisor-api: '1'
   adsb-exchange:
     depends_on:
       - dump1090-fa
     build:
       context: ./adsb-exchange
     image: adsb-exchange
-    restart: always
+    restart: unless-stopped
     environment:
       ADSB_EXCHANGE_SITENAME: ''
       ADSB_EXCHANGE_UUID: ''
@@ -218,30 +233,84 @@ services:
       - '30154'
       - '30157'
       - '31003'
+    labels:
+      io.balena.features.supervisor-api: '1'
   wingbits:
     depends_on:
       - dump1090-fa
     build: ./wingbits
     image: wingbits
-    restart: always
+    restart: unless-stopped
+    privileged: true
     environment:
       - WINGBITS_DEVICE_ID=
       - LAT=
       - LON=
     expose:
       - '30154'
+    labels:
+      io.balena.features.supervisor-api: '1'
+  planewatch:
+    depends_on:
+      - dump1090-fa
+    build: ./planewatch
+    image: planewatch
+    restart: unless-stopped
+    environment:
+      - LAT=
+      - LON=
+      - ALT=
+      - PLANEWATCH_API_KEY=
+    expose:
+      - '30105'
+    labels:
+      io.balena.features.supervisor-api: '1'
+  autohupr:
+    build: ./autohupr
+    tmpfs:
+      - /tmp/work
+    labels:
+      io.balena.features.balena-api: '1'
+      io.balena.features.supervisor-api: '1'
+  tar1090:
+    depends_on:
+      - dump1090-fa
+      - adsb-exchange
+    build: ./tar1090
+    image: tar1090
+    restart: unless-stopped
+    environment:
+      - BEASTHOST=dump1090-fa
+      - MLATHOST=adsb-exchange
+      - MLATPORT=30157
+      - LAT=
+      - LON=
+    volumes:
+      - tar1090:/var/globe_history
+      - tar1090:/var/timelapse1090
+      - tar1090:/var/lib/collectd
+      - tar1090:/var/lib/collectd/rrd
+      - tar1090:/var/log
+    ports:
+      - "8078:80"
+    labels:
+      - "io.balena.features.supervisor-api=1"
+      - "io.balena.features.procfs=1"
+      - "traefik.enable=true"
+      - "traefik.http.routers.tar1090.rule=PathPrefix(`/tar1090`)"
+      - "traefik.http.routers.tar1090-a.rule=PathPrefix(`/graphs1090`)"
 # Optional: Uncomment to enable custom mlat server.
 #  mlat-client:
 #    depends_on:
 #      - dump1090-fa
 #    build: ./mlat-client
 #    image: mlat-client
-#    restart: always
+#    restart: unless-stopped
 #    environment:
 #      - LAT=
 #      - LON=
 #      - ALT=
 #      - MLAT_CLIENT_USER=
-
-
-
+#      - MLAT_SERVER=
+#    labels:
+#      io.balena.features.supervisor-api: '1'

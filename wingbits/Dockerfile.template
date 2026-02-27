@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:bullseye AS base
+FROM balenalib/%%BALENA_ARCH%%-debian:bookworm AS base
 LABEL maintainer="https://github.com/ketilmo"
 
 EXPOSE 30154
@@ -8,10 +8,13 @@ ENV WINGBITS_DEVICE_ID=
 ENV RECEIVER_HOST=dump1090-fa
 ENV RECEIVER_PORT=30005
 
-ENV WINGBITS_CONFIG_VERSION=0.0.5
-ENV WINGBITS_COMMIT_ID=96cb3ffb4628fbb8a128a02d691ee16bdff7f917
+# renovate: datasource=custom.wingbits-version depName=wingbits-version versioning=loose
+ENV WINGBITS_CONFIG_VERSION=0.2.0
+# renovate: datasource=custom.wingbits-json depName=wingbits-json versioning=loose
+ENV WINGBITS_COMMIT_ID=v1.10.6
+ENV WINGBITS_DATE=2026-02-18T13:16:13.028615117Z
 
-ARG PERM_INSTALL="curl gettext-base tini ncurses-bin zlib1g" 
+ARG PERM_INSTALL="curl gettext-base tini ncurses-dev zlib1g jq python3-pip python3-venv wget"
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \
@@ -20,8 +23,9 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-ARG READSB_COMMIT=21353a0d9eeb71f42371e053e0104ee06e21b87c
-ARG TEMP_INSTALL="git gcc make libusb-1.0-0-dev ncurses-dev build-essential debhelper libncurses5-dev zlib1g-dev python3-dev libzstd-dev pkg-config"
+# renovate: datasource=github-tags depName=wiedehopf/readsb versioning=loose
+ARG READSB_VERSION=v3.16.9
+ARG TEMP_INSTALL="git gcc make libusb-1.0-0-dev build-essential debhelper zlib1g-dev python3-dev libzstd-dev pkg-config"
 
 WORKDIR /tmp
 
@@ -32,7 +36,7 @@ WORKDIR /tmp
 
 RUN git clone --single-branch https://github.com/wiedehopf/readsb.git && \
 	cd readsb && \
-	git checkout $READSB_COMMIT && \
+	git checkout tags/${READSB_VERSION} && \
 	make -j3 AIRCRAFT_HASH_BITS=14
 
 FROM base AS release
@@ -47,11 +51,8 @@ RUN chmod +x /tmp/wingbits_installer.sh && \
 	./wingbits_installer.sh && \
 	chmod +x /start.sh && \
 	mkdir -p /run/wingbits-feed && \
-	mkdir -p /etc/wingbits && \
 	echo "$WINGBITS_CONFIG_VERSION" > /etc/wingbits/version && \
+        echo "$WINGBITS_COMMIT_ID" > /etc/wingbits/json-version && \
 	rm -rf /tmp/*
-
-RUN curl -o /etc/vector/vector.yaml https://gitlab.com/wingbits/config/-/raw/$WINGBITS_COMMIT_ID/vector.yaml
-RUN sed -i 's|DEVICE_ID|WINGBITS_DEVICE_ID|g' /etc/vector/vector.yaml
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]

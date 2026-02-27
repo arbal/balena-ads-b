@@ -11,8 +11,10 @@
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
+**/*.js
 **/azds.yaml
 **/bin
+**/build
 **/charts
 **/docker-compose*
 **/compose*

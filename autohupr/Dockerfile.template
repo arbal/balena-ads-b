@@ -1,0 +1,18 @@
+FROM balenalib/%%BALENA_ARCH%%-debian-node:bookworm AS base
+LABEL maintainer="https://github.com/ketilmo"
+
+RUN install_packages tini
+
+WORKDIR /usr/src/app
+
+COPY package.json package-lock.json tsconfig.json ./
+
+COPY src/ ./src/
+
+RUN npm install && npm run build && npm prune --production
+
+COPY start.sh ./
+
+RUN chmod +x ./start.sh
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/src/app/start.sh"]
