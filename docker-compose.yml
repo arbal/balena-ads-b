@@ -1,61 +1,82 @@
-version: '2'
+version: '2.4'
 volumes:
   settings:
-  radarbox:
+  airnav-radar:
+  tar1090:
+  tar1090-timelapse:
+  tar1090-collectd:
+  tar1090-log:
+  aircraft-data:
+  tailscale-state:
+  nut-config:
+  nut-run:
 services:
-  browser:
-    image: bh.cr/balenalabs/browser-aarch64 # where <arch> is one of aarch64, arm32 or amd64
-    privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
+  kiosk:
+    restart: unless-stopped
+    build: ./kiosk
+    privileged: true
     ports:
-        - '5011' # management API (optional)
-        - '35173' # Chromium debugging port (optional)
+      - 8081:8080
     volumes:
-      - 'settings:/data' # Only required if using PERSISTENT flag (see below)
+      - 'settings:/data'
+    labels:
+      io.balena.features.supervisor-api: '1'
   wifi-connect:
     build: ./wifi-connect
-    restart: always
+    restart: unless-stopped
     network_mode: host
     environment:
-      - DBUS_SYSTEM_BUS_ADDRESS="unix:path=/host/run/dbus/system_bus_socket"
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
       - PORTAL_LISTENING_PORT=8181
       - PORTAL_SSID=balenaWiFi
       - PORTAL_PASSPHRASE=balenaWiFi
-      - ACTIVITY_TIMEOUT=120
+      - ACTIVITY_TIMEOUT=180
     ports:
       - "8181:8181"
     cap_add:
       - NET_ADMIN
     labels:
       io.balena.features.dbus: '1'
+      io.balena.features.supervisor-api: '1'
   frontend-proxy:
     image: traefik
     build: ./traefik
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
     labels:
       io.balena.features.balena-socket: '1'
+      io.balena.features.supervisor-api: '1'
   dump1090-fa:
     build: ./dump1090-fa
     image: dump1090-fa
-    restart: always
+    restart: unless-stopped
+    # privileged is required so start.sh can write
+    # /sys/module/usbcore/parameters/usbfs_memory_mb=0 (lifts the 16 MB
+    # usbfs buffer cap for high-rate SDR captures such as Airspy at 12 Msps).
+    # Unprivileged containers get /sys mounted read-only regardless of
+    # capabilities, so the write fails with EROFS and trips the start.sh
+    # set -e crash loop.
     privileged: true
     environment:
       - LAT=
       - LON=
     devices:
       - "/dev/bus/usb"
-    expose:
-      - "30001"
-      - "30002"
-      - "30003"
-      - "30004"
-      - "30005"
-      - "30102"
-      - "30104"
-      - "30105"
-      - "30106"
-      - "8080"
+    # `expose:` is informational only on the default Compose bridge network and
+    # balena-cli strips it from the composition at push time. Kept commented as
+    # documentation of which ports each service makes available to peers.
+    # expose:
+    #   - "30001"
+    #   - "30002"
+    #   - "30003"
+    #   - "30004"
+    #   - "30005"
+    #   - "30102"
+    #   - "30104"
+    #   - "30105"
+    #   - "30106"
+    #   - "8080"
     ports:
       - "30001:30001"
       - "30002:30002"
@@ -67,7 +88,10 @@ services:
       - "30105:30105"
       - "30106:30106"
       - "8080:8080"
+    volumes:
+      - 'aircraft-data:/run/dump1090-fa'
     labels:
+      - "io.balena.features.supervisor-api=1"
       - "traefik.enable=true"
       # New, permanent redirect (from 13 March 2021)
       - "traefik.http.routers.skyaware.rule=PathPrefix(`/skyaware`)"
@@ -81,11 +105,17 @@ services:
       - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.regex=^.*/dump1090-fa.*$$"
       - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.replacement=/skyaware/"
       - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.permanent=true"
-# Uncomment to enable dump978 UAT tracking (USA only).
+      # Airspy stats page, served by the in-container lighttpd when
+      # AIRSPY_ADSB_STATS=true (87-airspy.conf adds /airspy_adsb/ -> /run/airspy_adsb/).
+      - "traefik.http.routers.airspy-adsb.rule=PathPrefix(`/airspy_adsb`)"
+      - "traefik.http.routers.airspy-adsb.middlewares=airspy-adsb-redirect"
+      - "traefik.http.middlewares.airspy-adsb-redirect.redirectregex.regex=^.*/airspy_adsb$$"
+      - "traefik.http.middlewares.airspy-adsb-redirect.redirectregex.replacement=/airspy_adsb/"
+      - "traefik.http.middlewares.airspy-adsb-redirect.redirectregex.permanent=true"
   dump978-fa:
     build: ./dump978-fa
     image: dump978-fa
-    restart: always
+    restart: unless-stopped
     environment:
       - LAT=
       - LON=
@@ -93,15 +123,17 @@ services:
       - DUMP978_ENABLED=false
     devices:
       - "/dev/bus/usb"
-    expose:
-      - "30978"
-      - "30979"
-      - "8978"
+    # expose: kept for docs, see dump1090-fa note
+    # expose:
+    #   - "30978"
+    #   - "30979"
+    #   - "8978"
     ports:
       - "30978:30978"
       - "30979:30979"
       - "8978:8978"
     labels:
+      - "io.balena.features.supervisor-api=1"
       - "traefik.enable=true"
       - "traefik.http.routers.dump978-fa.rule=PathPrefix(`/skyaware978`)"
       - "traefik.http.routers.dump978-fa.middlewares=dump978-fa-redirect"
@@ -113,21 +145,24 @@ services:
       - dump1090-fa
     build: ./piaware
     image: piaware
-    restart: always
+    restart: unless-stopped
     environment:
       - FLIGHTAWARE_FEEDER_ID=
       - DUMP978_ENABLED=false
+    labels:
+      io.balena.features.supervisor-api: '1'
   fr24feed:
     depends_on:
       - dump1090-fa
     build: ./fr24feed
     image: fr24feed
-    restart: always
+    restart: unless-stopped
     ports:
       - "8754:8754"
     environment:
       - FR24_KEY=
     labels:
+      - "io.balena.features.supervisor-api=1"
       - "traefik.enable=true"
       - "traefik.http.routers.fr24feed.rule=PathPrefix(`/fr24feed`)"
       - "traefik.http.routers.fr24feed-a.rule=Path(`/logo.png`)"
@@ -139,10 +174,21 @@ services:
       - "traefik.http.routers.fr24feed-g.rule=Path(`/jquery.js`)"
       - "traefik.http.routers.fr24feed-h.rule=Path(`/flights.json`)"
       - "traefik.http.routers.fr24feed-i.rule=Path(`/shutdown.html`)"
-      - "traefik.http.routers.fr24feed-j.rule=Path(`/logs.json`)"
+      - "traefik.http.routers.fr24feed-j.rule=Path(`/logs.bin`)"
       - "traefik.http.routers.fr24feed-k.rule=Path(`/shutdown.bin`)"
       - "traefik.http.routers.fr24feed-l.rule=Path(`/restart.bin`)"
       - "traefik.http.routers.fr24feed-m.rule=Path(`/config.json`)"
+      - "traefik.http.routers.fr24feed-n.rule=Path(`/index.html`)"
+      - "traefik.http.routers.fr24feed-o.rule=Path(`/settings_na.html`)"
+      - "traefik.http.routers.fr24feed-p.rule=Path(`/logs.html`)"
+      - "traefik.http.routers.fr24feed-q.rule=Path(`/wifi.html`)"
+      - "traefik.http.routers.fr24feed-r.rule=Path(`/access_points.json`)"
+      - "traefik.http.routers.fr24feed-s.rule=Path(`/monitor.txt`)"
+      - "traefik.http.routers.fr24feed-t.rule=Path(`/save.bin`)"
+      - "traefik.http.routers.fr24feed-u.rule=Path(`/wifi.bin`)"
+      - "traefik.http.routers.fr24feed-v.rule=Path(`/logs-uat-fr24.bin`)"
+      - "traefik.http.routers.fr24feed-w.rule=Path(`/logs-uat-tcp.bin`)"
+      - "traefik.http.routers.fr24feed-x.rule=Path(`/diagnostics_dump.tgz`)"
       - "traefik.http.routers.fr24feed.middlewares=fr24feed-redirect,fr24feed-stripprefix"
       - "traefik.http.middlewares.fr24feed-redirect.redirectregex.regex=^.*/fr24feed$$"
       - "traefik.http.middlewares.fr24feed-redirect.redirectregex.replacement=/fr24feed/"
@@ -153,23 +199,17 @@ services:
       - dump1090-fa
     build: ./planefinder
     image: planefinder
-    restart: always
+    restart: unless-stopped
     ports:
       - "30053:30053"
     labels:
+      - "io.balena.features.supervisor-api=1"
       - "traefik.enable=true"
       - "traefik.http.routers.planefinder.rule=PathPrefix(`/planefinder`)"
-      - "traefik.http.routers.planefinder-a.rule=PathPrefix(`/`)"
-      - "traefik.http.routers.planefinder-b.rule=PathPrefix(`/ajax/`)"
-      - "traefik.http.routers.planefinder-c.rule=PathPrefix(`/assets/`)"
-      - "traefik.http.routers.planefinder-d.rule=PathPrefix(`/client/`)"
-      - "traefik.http.routers.planefinder-e.rule=Path(`/map.html`)"
-      - "traefik.http.routers.planefinder-f.rule=Path(`/map3D.html`)"
-      - "traefik.http.routers.planefinder-g.rule=Path(`/data.html`)"
-      - "traefik.http.routers.planefinder-h.rule=Path(`/logs.html`)"
-      - "traefik.http.routers.planefinder-i.rule=Path(`/viz.html`)"
-      - "traefik.http.routers.planefinder-j.rule=Path(`/stats.html`)"
-      - "traefik.http.routers.planefinder-l.rule=Path(`/setup.html`)"
+      - "traefik.http.routers.planefinder-a.rule=PathPrefix(`/ajax/`)"
+      - "traefik.http.routers.planefinder-b.rule=PathPrefix(`/assets/`)"
+      - "traefik.http.routers.planefinder-c.rule=PathPrefix(`/client/`)"
+      - "traefik.http.routers.planefinder-d.rule=Path(`/gps.html`)"
       - "traefik.http.routers.planefinder.middlewares=planefinder-redirect,planefinder-stripprefix"
       - "traefik.http.middlewares.planefinder-redirect.redirectregex.regex=^.*/planefinder$$"
       - "traefik.http.middlewares.planefinder-redirect.redirectregex.replacement=/planefinder/"
@@ -180,68 +220,261 @@ services:
       - dump1090-fa
     build: ./opensky-network
     image: opensky-network
-    restart: always
+    restart: unless-stopped
     environment:
       - OPENSKY_USERNAME=
       - OPENSKY_SERIAL=
-  radarbox:
+    labels:
+      io.balena.features.supervisor-api: '1'
+  airnav-radar:
     depends_on:
       - dump1090-fa
-    build: ./radarbox
-    image: radarbox
-    restart: always
-    expose:
-      - "32088"
+    build: ./airnav-radar
+    image: airnav-radar
+    restart: unless-stopped
+    # expose: kept for docs, see dump1090-fa note
+    # expose:
+    #   - "32088"
     environment:
-      - RADARBOX_KEY=
+      - AIRNAV_RADAR_KEY=
       - LAT=
       - LON=
       - ALT=
-#Slight hack to make RadarBox run on i386 and amd64 architectures.
     volumes:
-      - 'radarbox:/sys/class/thermal:ro'
-      - 'radarbox:/var/radarbox/thermal'
+      # Slight hack to make AirNav Radar run on the amd64 architecture
+      # which lacks a kernel-provided /sys/class/thermal. The Dockerfile
+      # bakes /var/radarbox/thermal/thermal_zone0/temp = 24000 into the
+      # image; on first container start, Docker copies that path's content
+      # into the (empty) named volume, so the same fake temp is also
+      # visible at /sys/class/thermal. Nothing writes at runtime, so both
+      # mounts are :ro.
+      - 'airnav-radar:/sys/class/thermal:ro'
+      - 'airnav-radar:/var/radarbox/thermal:ro'
+    labels:
+      io.balena.features.supervisor-api: '1'
   adsb-exchange:
     depends_on:
       - dump1090-fa
     build:
       context: ./adsb-exchange
     image: adsb-exchange
-    restart: always
+    restart: unless-stopped
     environment:
       ADSB_EXCHANGE_SITENAME: ''
       ADSB_EXCHANGE_UUID: ''
       LAT: ''
       LON: ''
       ALT: ''
-    expose:
-      - '30154'
-      - '30157'
-      - '31003'
+    # expose: kept for docs, see dump1090-fa note
+    # expose:
+    #   - '30154'
+    #   - '30157'
+    #   - '31003'
+    labels:
+      io.balena.features.supervisor-api: '1'
   wingbits:
     depends_on:
       - dump1090-fa
     build: ./wingbits
     image: wingbits
-    restart: always
+    restart: unless-stopped
     environment:
       - WINGBITS_DEVICE_ID=
       - LAT=
       - LON=
-    expose:
-      - '30154'
-# Optional: Uncomment to enable custom mlat server.
-#  mlat-client:
-#    depends_on:
-#      - dump1090-fa
-#    build: ./mlat-client
-#    image: mlat-client
-#    restart: always
-#    environment:
-#      - LAT=
-#      - LON=
-#      - ALT=
-#      - MLAT_CLIENT_USER=
-
-
-
+    # privileged is required: without it the embedded Beast listener
+    # on port 30015 never comes up and GeoSigners are not detected.
+    # Granular caps/devices (SYS_RAWIO, NET_ADMIN, /dev/bus/usb,
+    # major-189 cgroup rule) are not sufficient.
+    privileged: true
+    # expose: kept for docs, see dump1090-fa note
+    # expose:
+    #   - '30154'
+    labels:
+      io.balena.features.supervisor-api: '1'
+  planewatch:
+    depends_on:
+      - dump1090-fa
+    build: ./planewatch
+    image: planewatch
+    restart: unless-stopped
+    environment:
+      - LAT=
+      - LON=
+      - ALT=
+      - PLANEWATCH_API_KEY=
+    # expose: kept for docs, see dump1090-fa note
+    # expose:
+    #   - '30105'
+    labels:
+      io.balena.features.supervisor-api: '1'
+  autohupr:
+    build: ./autohupr
+    restart: unless-stopped
+    tmpfs:
+      - /tmp/work
+    labels:
+      io.balena.features.balena-api: '1'
+      io.balena.features.supervisor-api: '1'
+  tar1090:
+    depends_on:
+      - dump1090-fa
+      - adsb-exchange
+    build: ./tar1090
+    image: tar1090
+    restart: unless-stopped
+    environment:
+      - BEASTHOST=dump1090-fa
+      - MLATHOST=adsb-exchange
+      - MLATPORT=30157
+      - LAT=
+      - LON=
+    volumes:
+      - tar1090:/var/globe_history
+      - tar1090-timelapse:/var/timelapse1090
+      - tar1090-collectd:/var/lib/collectd
+      - tar1090-log:/var/log
+    ports:
+      - "8078:80"
+    labels:
+      - "io.balena.features.supervisor-api=1"
+      - "traefik.enable=true"
+      - "traefik.http.routers.tar1090.rule=PathPrefix(`/tar1090`)"
+      - "traefik.http.routers.tar1090-a.rule=PathPrefix(`/graphs1090`)"
+  mlat-client:
+    depends_on:
+      - dump1090-fa
+    build: ./mlat-client
+    image: mlat-client
+    restart: unless-stopped
+    environment:
+      - LAT=
+      - LON=
+      - ALT=
+      - MLAT_CLIENT_USER=
+      - MLAT_SERVER=
+    labels:
+      io.balena.features.supervisor-api: '1'
+  ident:
+    depends_on:
+      - dump1090-fa
+    build: ./ident
+    image: ident
+    restart: unless-stopped
+    environment:
+      - IDENT_ADDR=:8080
+      - IDENT_DATA_DIR=/run/dump1090-fa
+      - IDENT_UPSTREAM_TYPE=dump1090-fa
+      - IDENT_BASE_PATH=/ident
+    # expose: kept for docs, see dump1090-fa note
+    # expose:
+    #   - "8080"
+    ports:
+      - "8090:8080"
+    volumes:
+      - 'aircraft-data:/run/dump1090-fa:ro'
+    labels:
+      - "io.balena.features.supervisor-api=1"
+      - "traefik.enable=true"
+      - "traefik.http.routers.ident.rule=PathPrefix(`/ident`)"
+      - "traefik.http.routers.ident.middlewares=ident-redirect"
+      - "traefik.http.middlewares.ident-redirect.redirectregex.regex=^.*/ident$$"
+      - "traefik.http.middlewares.ident-redirect.redirectregex.replacement=/ident/"
+      - "traefik.http.middlewares.ident-redirect.redirectregex.permanent=true"
+  tailscale:
+    build: ./tailscale
+    image: tailscale
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    tmpfs:
+      - /tmp
+      - /var/run/
+    environment:
+      - TS_AUTHKEY=
+      - TS_HOSTNAME=
+      - TS_EXTRA_ARGS=
+      - TS_ROUTES=
+      - TS_ACCEPT_DNS=false
+      - TS_USERSPACE=false
+      # resin-vpn / resin-dns are balena's management-VPN interfaces;
+      # excluding them keeps tailscaled's netmon from picking them as
+      # default-route candidates.
+      - TS_EXCLUDED_INTERFACES=resin-vpn resin-dns
+      - TAILSCALE_SERVE_TRAEFIK=false
+      # Disable tailscaled's outbound update-check probes. Applied post-up via
+      # `tailscale set --update-check=$value` in start.sh.
+      - TS_UPDATE_CHECK=false
+      # Escape hatch for arbitrary post-up `tailscale set` args, appended
+      # verbatim (space-separated).
+      - TS_POST_UP_SET_ARGS=
+    volumes:
+      - 'tailscale-state:/var/lib/tailscale'
+    labels:
+      io.balena.features.supervisor-api: '1'
+      io.balena.features.kernel-modules: '1'
+  otel-collector:
+    depends_on:
+      - dump1090-fa
+    build: ./otel-collector
+    image: otel-collector
+    restart: unless-stopped
+    # Cap RAM so a runaway scrape config can't OOM the device. otelcol-contrib
+    # + node_exporter steady-state is ~50–80 MB; 256 MB is generous headroom.
+    mem_limit: 268435456
+    # pid: host lets the bundled node_exporter see all host processes.
+    pid: host
+    environment:
+      - OTLP_ENDPOINT=
+      - OTLP_AUTH_HEADER=
+      - OTLP_HEADERS=
+      - GRAFANA_INSTANCE_ID=
+      - GRAFANA_API_KEY=
+      - OTEL_NODE_METRICS_ENABLED=true
+      - OTEL_DOCKER_STATS_ENABLED=true
+      - OTEL_LOGS_ENABLED=false
+      - OTEL_JOURNALD_PRIORITY=info
+      - OTEL_DUMP1090_ENABLED=false
+      - OTEL_COLLECTION_INTERVAL=30s
+      - OTEL_DOCKER_ENDPOINT=unix:///var/run/balena.sock
+      - NODE_EXPORTER_INSTANCE=
+      - DUMP1090_EXPORTER_HOST=dump1090-exporter
+      - DUMP1090_EXPORTER_PORT=9105
+    labels:
+      # procfs label omitted: with pid:host it crashes in-container ps (ketilmo/balena-ads-b#488).
+      io.balena.features.sysfs: '1'
+      io.balena.features.journal-logs: '1'
+      io.balena.features.balena-socket: '1'
+      io.balena.features.supervisor-api: '1'
+  dump1090-exporter:
+    depends_on:
+      - dump1090-fa
+    build: ./dump1090-exporter
+    image: dump1090-exporter
+    restart: unless-stopped
+    environment:
+      - DUMP1090_RESOURCE_PATH=/run/dump1090-fa
+      - DUMP1090_EXPORTER_PORT=9105
+      - DUMP1090_EXPORTER_LOG_LEVEL=info
+    volumes:
+      - 'aircraft-data:/run/dump1090-fa:ro'
+    labels:
+      io.balena.features.supervisor-api: '1'
+  nut-server:
+    image: networkupstools/nut:latest
+    restart: unless-stopped
+    container_name: nut-server
+    ports:
+      - "3493:3493"
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+    volumes:
+      - nut-config:/etc/nut
+      - nut-run:/var/run/nut
+    environment:
+      - UPS_NAME=cyberpowerups
+      - UPSD_LISTEN=0.0.0.0:3493
+    cap_add:
+      - SYS_RAWIO
+    labels:
+      io.balena.features.supervisor-api: '1'
